@@ -1,6 +1,7 @@
 
 
-public class Main {
+package projects.Indexing;
+public class TargetNum {
     public static void main(String[] args) {
         int nums[] = {12, 5, 6, 20, 50};
         int target = 4;
@@ -18,3 +19,4 @@ public class Main {
         System.out.println("Output: " + resultIndex);
     }
 }
+
