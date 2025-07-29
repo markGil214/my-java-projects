@@ -1,40 +1,52 @@
-interface Workable {
-    void work();
-}
+class InkCartridge{
+    int ink;
 
-class HumanWorker implements Workable {
-    @Override
-    public void work() {
-        System.out.println("Human is working...");
+    InkCartridge(int ink) {
+        this.ink = ink;
+    }
+
+    boolean hasInk() {
+        return ink > 0;
+    }
+
+    int inkUsed() {
+        return ink--;
+    }
+
+    int checkInk() {
+        return ink;
     }
 }
 
-class RobotWorker implements Workable {
-    @Override
-    public void work() {
-        System.out.println("Robot is assembling...");
+class Printer {
+    InkCartridge inkCartridge;
+
+    Printer(InkCartridge inkCartridge) {
+        this.inkCartridge = inkCartridge;
     }
+
+    void print(String display) {
+        if(inkCartridge.hasInk()) {
+            System.out.println("You printed: " + display);
+            inkCartridge.inkUsed();
+
+            System.out.println("Ink remaining: " + inkCartridge.checkInk());
+        } else {
+            System.out.println("You have no remaining ink.");
+            System.out.println("Ink remaining: " + inkCartridge.checkInk());
+        }
+    }
+
+
 }
 
 
-class Manager {
-    Workable human = new HumanWorker();
-    Workable robot = new RobotWorker();
-
-    void printHuman() {
-        human.work();
-    }
-
-    void printRobot() {
-        robot.work();
-    }
-
-}
 public class Main {
     public static void main(String[] args) {
-        Manager manager1 = new Manager();
+        InkCartridge inkCartridge = new InkCartridge(3);
+        Printer printer = new Printer(inkCartridge);
 
-        manager1.printHuman();
-        manager1.printRobot();
+        printer.print("mama mo");
+
     }
 }
