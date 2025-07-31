@@ -1,98 +1,104 @@
-import java.util.ArrayList;
-import java.time.LocalDateTime;
+import java.awt.print.Book;
+import java.util.*;
 
- class Transaction {
-    private String sender;
-    private String receiver;
-    private double amount;
-    private LocalDateTime localDateTime;
 
-    public Transaction(String sender, String receiver, double amount) {
-        this.sender = sender;
-        this.receiver = receiver;
-        this.amount = amount;
-        localDateTime = LocalDateTime.now();
-    }
+    class Product{
+        private int productId;
+        private String productName;
+        private double price;
 
-    public String toString() {
-        return sender + " transferred " + "$" + amount + " to " + receiver + " at " +
-                localDateTime;
-    }
-}
- class BankAccount {
-     ArrayList<Transaction> transactions;
-    private double balance;
-    private String accountNumber;
-    private String ownerName;
+        Product(int productId, String productName, double price) {
+            this.productId = productId;
+            this.productName = productName;
+            this.price = price;
+        }
 
-    public BankAccount(String accountNumber, String ownerName) {
-        this.accountNumber = accountNumber;
-        this.ownerName = ownerName;
-        this.balance = 0.0;
-        this.transactions = new ArrayList<>();
-    }
+        public int getProductId() {
+            return productId;
+        }
 
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-            System.out.println( ownerName + " Deposited $" + amount + ". New balance: $" + balance);
-        } else {
-            System.out.println("Invalid deposit amount: $" + amount);
+        public String getProductName() {
+            return productName;
+        }
+
+        public double getPrice() {
+            return price;
         }
     }
 
-    public boolean withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-            return true;
-        } else {
+    class Cart {
+        ArrayList<Product> products = new ArrayList<>();
+
+        void addItem(Product product, int quantity) {
+            System.out.println(product.getProductName() + ", quantity of " + quantity + " was added.");
+
+            for(int i = 1; i <= quantity; i++) {
+                products.add(product);
+            }
+        }
+
+        void displayItems() {
+            for(Product product : products) {
+                System.out.println(product.getProductName() + " - " + product.getPrice());
+            }
+
+            System.out.println("Subtotal: " + getTotal());
+        }
+
+        boolean removeItem(int id) {
+            int track = 0;
+            for (Product product : products) {
+                if (product.getProductId() == id) {
+                    System.out.println(product.getProductName() + " was removed.");
+                    products.remove(track);
+                    return true;
+                }
+
+                track++;
+            }
             return false;
         }
-    }
 
-    public double getBalance() {
-        return balance;
-    }
-
-    public boolean transferTo(BankAccount recipient, double amount) {
-        boolean success = withdraw(amount);
-
-        if(success) {
-            recipient.deposit(amount);
-            Transaction transaction = new Transaction(ownerName, recipient.ownerName, amount);
-            recipient.transactions.add(transaction);
-
-            System.out.println("Transfer Succesful");
-            return true;
-        } else {
-            System.out.println("Transfer failed - Insufficient funds.");
-            return false;
+        double getTotal() {
+            double sum = 0;
+            for(Product product : products) {
+                sum += product.getPrice();
+            }
+            return sum;
         }
+
+
+
     }
 
-    public void showTransaction() {
-        System.out.println(ownerName + "'s transaction history");
-        for(Transaction t : transactions) {
-            System.out.println(t);
-        }
-    }
-}
+
+
 
 public class Main {
     public static void main(String[] args) {
-        BankAccount alice = new BankAccount("001", "Alice");
-        BankAccount bob = new BankAccount("002", "Bob");
-        alice.deposit(100);
-        bob.deposit(50);
 
-        System.out.println("Alice balance: " + alice.getBalance());
-        System.out.println("Bob balance: " + bob.getBalance());
+        // I follow what is on the use stories, i made a revisions
 
-        alice.transferTo(bob, 30);   // Should succeed
-        alice.transferTo(bob, 200);  // Should fail
+        // The user browses the online store and sees a list of products. //
+        // The user adds a “Wireless Mouse” to their shopping cart.       //
+        // The user adds two “USB-C Cables” to the cart.                  //
+        // The user reviews the cart to see what’s inside and the total price.    //
+        // The user removes the “Wireless Mouse” from the cart.           //
+        // The user proceeds to checkout and completes the purchase.      //
+        Product product1 = new Product(1000, "Wireless Mouse", 18.50);
+        Product product2 = new Product(1001, "USB-C Cables", 2.30);
 
-        alice.showTransaction();
-        bob.showTransaction();
+        Cart cart = new Cart();
+
+        cart.addItem(product1, 1);
+        cart.addItem(product2, 2);
+
+        cart.displayItems();
+
+        cart.removeItem(1000);
+
+        cart.displayItems();
+
 
 
 
