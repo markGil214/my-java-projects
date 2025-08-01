@@ -1,106 +1,101 @@
 import java.awt.print.Book;
 import java.util.*;
+// Show me your attempt - don't worry if it's wrong
+   class Person {
+      // I created final int to avoid assigning it new value;
+      private static final int MIN_AGE = 0;
+      private static final int MAX_AGE = 150;
 
+    // Your code here
+    private String name;
+    private int age;
 
-    class Product{
-        private int productId;
-        private String productName;
-        private double price;
+    Person(String name, int age) {
+        validateName(name);
+        validateAge(age);
+        this.name = name.trim();
+        this.age = age;
+    }
 
-        Product(int productId, String productName, double price) {
-            this.productId = productId;
-            this.productName = productName;
-            this.price = price;
-        }
+    private void validateName(String name) {
+       if(name == null) {
+           throw new IllegalArgumentException("Name should not null");
+       } else if (name.trim().isBlank()) { // idk what this means, explain it later like, does i mean if name is trimmed and is not blank
+           throw new IllegalArgumentException("The name should not blank");
+       }
+    }
 
-        public int getProductId() {
-            return productId;
-        }
-
-        public String getProductName() {
-            return productName;
-        }
-
-        public double getPrice() {
-            return price;
+    private void validateAge(int age) {
+        // Your implementation
+        if(age < MIN_AGE) {
+            throw new IllegalArgumentException("The age should not be negative");
+        } else if (age > MAX_AGE) {
+            throw new IllegalArgumentException("The age should not exceed to 150");
         }
     }
 
-    class Cart {
-        ArrayList<Product> products = new ArrayList<>();
-
-        void addItem(Product product, int quantity) {
-            System.out.println(product.getProductName() + ", quantity of " + quantity + " was added.");
-
-            for(int i = 1; i <= quantity; i++) {
-                products.add(product);
-            }
-        }
-
-        void displayItems() {
-            for(Product product : products) {
-                System.out.println(product.getProductName() + " - " + product.getPrice());
-            }
-
-            System.out.println("Subtotal: " + getTotal());
-        }
-
-        boolean removeItem(int id) {
-            int track = 0;
-            for (Product product : products) {
-                if (product.getProductId() == id) {
-                    System.out.println(product.getProductName() + " was removed.");
-                    products.remove(track);
-                    return true;
-                }
-
-                track++;
-            }
-            return false;
-        }
-
-        double getTotal() {
-            double sum = 0;
-            for(Product product : products) {
-                sum += product.getPrice();
-            }
-            return sum;
-        }
-
-
-
+    public String getName() {
+        return name;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void displayInfo() {
+        System.out.println("Helllo, I am " + name + ", and I am " + age + " years old.");
+    }
+
+    @Override
+    public String toString() {
+        return name + " - " + age;
+    }
+}
 
 
 
 public class Main {
     public static void main(String[] args) {
+            // Test 1: Valid person
+            try {
+                Person person1 = new Person("John", 25);
+                System.out.println("Valid person created: " + person1);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
 
-        // I follow what is on the use stories, i made a revisions
+            // Test 2: Null name
+            try {
+                Person person2 = new Person(null, 25);
+                System.out.println("This should not print");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Caught null name error: " + e.getMessage());
+            }
 
-        // The user browses the online store and sees a list of products. //
-        // The user adds a “Wireless Mouse” to their shopping cart.       //
-        // The user adds two “USB-C Cables” to the cart.                  //
-        // The user reviews the cart to see what’s inside and the total price.    //
-        // The user removes the “Wireless Mouse” from the cart.           //
-        // The user proceeds to checkout and completes the purchase.      //
-        Product product1 = new Product(1000, "Wireless Mouse", 18.50);
-        Product product2 = new Product(1001, "USB-C Cables", 2.30);
+            // Test 3: Blank name
+            try {
+                Person person3 = new Person("   ", 25);
+                System.out.println("This should not print");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Caught blank name error: " + e.getMessage());
+            }
 
-        Cart cart = new Cart();
+            // Test 4: Negative age
+            try {
+                Person person4 = new Person("Mary", -5);
+                System.out.println("This should not print");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Caught negative age error: " + e.getMessage());
+            }
 
-        cart.addItem(product1, 1);
-        cart.addItem(product2, 2);
-
-        cart.displayItems();
-
-        cart.removeItem(1000);
-
-        cart.displayItems();
-
-
+            // Test 5: Age too high
+            try {
+                Person person5 = new Person("Bob", 200);
+                System.out.println("This should not print");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Caught high age error: " + e.getMessage());
+            }
+        }
 
 
-    }
 }
